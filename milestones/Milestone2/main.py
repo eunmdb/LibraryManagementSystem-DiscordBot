@@ -8,20 +8,22 @@
 # imports
 import os
 import discord
-import database as db
+# import database as db
+from database import Database
+import bot
 
 # environment variables
 token = os.environ['DISCORD_TOKEN']
 server = os.environ['DISCORD_GUILD']
-server_id = os.environ['SERVER_ID']  # optional
-channel_id = os.environ['CHANNEL_ID']  # optional
+# server_id = os.environ['SERVER_ID']  # optional
+# channel_id = os.environ['CHANNEL_ID']  # optional
 
 # database connection
 # secret keys related to your database must be updated. Otherwise, it won't work
-db_conn = db.connect()
+# db_conn = db.connect()
+db_conn = Database.connect()
 # bot events
-client = discord.Client()
-
+client = discord.Client(intents=discord.Intents.all())
 
 @client.event
 async def on_ready():
@@ -49,8 +51,7 @@ async def on_message(message):
     else:
         # A message was send by the user.
         msg = message.content.lower()
-        if "milestone3" in msg:
-            response = "I am alive. Signed: 'your bot'"
+        response = bot.BotResponse(msg)
     if response:
         # bot sends response to the Discord API and the response is show
         # on the channel from your Discord server that triggered this method.
